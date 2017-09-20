@@ -36,7 +36,9 @@ public class Flights extends AppCompatActivity implements LoaderManager.LoaderCa
         listView = (ListView)findViewById(R.id.listview);
         flightsAdapter = new FlightsAdapter(getApplicationContext(),null);
         listView.setAdapter(flightsAdapter);
+        //Here we call the loader manager that leads us to the oncreate loader
         getSupportLoaderManager().initLoader(0,null,this);
+        //once we click on the export button, the csv data is exported through email
         export.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +47,7 @@ public class Flights extends AppCompatActivity implements LoaderManager.LoaderCa
         });
 
     }
-
+//Return all the columns we want from the database table.
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         String[] projection = {FlightContract.FlightEntry.COLUMN_ID,FlightContract.FlightEntry.COLUMN_DATE,FlightContract.FlightEntry.COLUMN_TIME, FlightContract.FlightEntry.COLUMN_ORIGIN, FlightContract.FlightEntry.COLUMN_DESTINATION, FlightContract.FlightEntry.COLUMN_DEP_AIRLINE,
@@ -53,15 +55,13 @@ public class Flights extends AppCompatActivity implements LoaderManager.LoaderCa
 
         return new android.support.v4.content.CursorLoader(this, FlightContract.contentUri, projection, null, null, null);
     }
-
+// Once the load is finished display all the results into the adapter.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null){
             flightsAdapter.swapCursor(data);
             data_copy = data;
-            while(data_copy.moveToNext()){
-                Log.e(MainActivity.class.getSimpleName(), "exportCSV: "+ data_copy.getString(data_copy.getColumnIndex(FlightContract.FlightEntry.COLUMN_ORIGIN)) );
-            }
+          
         }
     }
 
@@ -71,6 +71,7 @@ public class Flights extends AppCompatActivity implements LoaderManager.LoaderCa
         flightsAdapter.swapCursor(null);
 
     }
+    //Exporting all the table database instance to the user email
     public void exportCSV(){
 
         int dep_airline_col = data_copy.getColumnIndex(FlightContract.FlightEntry.COLUMN_DEP_AIRLINE);

@@ -39,6 +39,7 @@ import java.util.List;
 public class Utils {
     List <String> carrier;
 
+    //perform the flights request
     public static ArrayList<FlightsInfoList> Performrequest(String origin, String destination){
         ArrayList<SliceInput> slices = fill_slices(origin, destination);
         List<TripOption> response = null;
@@ -53,8 +54,8 @@ public class Utils {
         return request;
     }
 
+    //Set up infos about the flights we want such as origins, destinations, carriers permitted, maximum of stops and dates..
     public static ArrayList<SliceInput> fill_slices(String origin, String destination) {
-
         ArrayList<SliceInput> slices = new ArrayList<SliceInput>();
         SliceInput slice = new SliceInput();
         List <String> carrier = new ArrayList<>();
@@ -70,6 +71,7 @@ public class Utils {
         return slices;
     }
 
+    //add a round trip and make the request 
     public static List<TripOption> makeTherequest(ArrayList<SliceInput> slices,String origin, String destination ) throws GeneralSecurityException, IOException {
         final String Api_key = "AIzaSyD6xZt5VCya8Cv-JYxNXjzKKuuxXEREuBc";
         final String App_name = "com.example.disen.Myflights";
@@ -89,19 +91,16 @@ public class Utils {
         slice.setPermittedCarrier(carrier);
         slice_second.add(slice);
         slices.add(slice);
-        //
+        //-----------------------------------------------------
         TripsSearchRequest request = new TripsSearchRequest();
         TripOptionsRequest trip = new TripOptionsRequest();
         PassengerCounts passengers= new PassengerCounts();
         passengers.setAdultCount(1);
         trip.setSolutions(1);
-
         trip.setPassengers(passengers);
         trip.setSlice(slices);
-
-        Log.e(MainActivity.class.getSimpleName(), "the slices: " + trip.getSlice().size());
         request.setRequest(trip);
-        //get the info returned
+        //get the info that is returned
         List<TripOption> trip_option = new ArrayList<>();
         QPXExpress qpx = new QPXExpress
                 .Builder(httpTransport, json_factory, null)
@@ -115,9 +114,9 @@ public class Utils {
             e.printStackTrace();
         }
         trip_option = response.getTrips().getTripOption();
-        Log.e(MainActivity.class.getSimpleName(), "onCreate: " + trip_option);
         return trip_option;
     }
+    //Here we extract the request results
     public static ArrayList<FlightsInfoList> extractrequest(List<TripOption> trip) {
         String date = "";
         String time = "";
@@ -131,13 +130,6 @@ public class Utils {
         String dep_airline = trip.get(0).getSlice().get(0).getSegment().get(0).getFlight().getCarrier();
         String ret_airline = trip.get(0).getSlice().get(1).getSegment().get(0).getFlight().getCarrier();
         flights_info.add(new FlightsInfoList(date,time,dep_airline,dep_flightNo,ret_airline,ret_flightNo,fare,""));
-
-        Log.e(Utils.class.getSimpleName(), "dest1 : "+ dep_airline);
-        Log.e(Utils.class.getSimpleName(), "dest2 : "+ ret_airline);
-        Log.e(Utils.class.getSimpleName(), "trip : "+ dep_flightNo);
-        Log.e(Utils.class.getSimpleName(), "dest2 : "+ ret_flightNo);
-        Log.e(Utils.class.getSimpleName(), "trip : "+ fare);
-
         return flights_info ;
 
     }

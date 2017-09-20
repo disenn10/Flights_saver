@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_flights"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context="com.example.disen.myflights.Flights">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_height="wrap_content">
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:id="@+id/listview"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_height="350dp">
+    </ListView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:id="@+id/export"
+        android:src="@drawable/ic_email_black_24dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>

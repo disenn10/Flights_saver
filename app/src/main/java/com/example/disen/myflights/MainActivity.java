@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         los_angeles = "LAX";
         boston = "BOS";
         myflights = (FloatingActionButton)findViewById(R.id.dsiplay_flights);
+        //Show us all requested flights saved in database once clicked
         myflights.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,11 +53,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Date mytime = c.getTime();
         SimpleDateFormat tf = new SimpleDateFormat("HH:mm:ss");
         temps = tf.format(mytime);
+        //This is where all loaded are iniated with all of them having distinct ids. Takes us to the on create loader
         getSupportLoaderManager().initLoader(0,null,this);
         getSupportLoaderManager().initLoader(1,null,this);
         getSupportLoaderManager().initLoader(2,null,this);
     }
 
+    //Each id is treated differently since they all have different flight requests
     @Override
     public Loader<ArrayList<FlightsInfoList>> onCreateLoader(int id, Bundle args) {
         switch (id){
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    //Once the load is finished data is added through database through the updateUi function
     @Override
     public void onLoadFinished(Loader<ArrayList<FlightsInfoList>> loader, ArrayList<FlightsInfoList> data) {
         if (data != null) {
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    
     public ArrayList getplaces(Integer i){
         String origin = null;
         String dest = null;
@@ -106,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return places;
     }
 
-
+    //This is where the database insertion is actually done
     private void updateUi(ArrayList<FlightsInfoList>data, Integer i) {
         ArrayList arrayList = getplaces(i);
         String origin = String.valueOf(arrayList.get(0));
